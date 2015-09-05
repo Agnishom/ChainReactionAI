@@ -132,12 +132,14 @@ def minimax(board,depth=3):
 			best_pos = b_new_pos
 	return best_pos, best_val
 
-def game():
+def auto_game():
 	a = Board()
 	while True:
 		new_move = minimax(a)[0]
 		print new_move
 		a = move(a, new_move)
+		if score(a,a.new_move*(-1)) == 1000:
+			return str(a.new_move*(-1)) + "Wins!"
 		print a
 		#p = input()
 		#a = move(a, p)
