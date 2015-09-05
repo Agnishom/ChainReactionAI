@@ -11,6 +11,9 @@ def bestn(board,n=10):
 	return sorted(conf, key=conf.get, reverse=True)[:n]
 
 def minimax(board,depth=3):
+	if (board.hash(),depth) in knowledge_base.minimax_results:
+		print "hit"
+		return knowledge_base.minimax_results[(board.hash(),depth)]
 	best_moves = bestn(board,n=5)
 	if depth == 1:
 		return (best_moves[0], score(move(board,best_moves[0]),board.new_move))
@@ -21,17 +24,20 @@ def minimax(board,depth=3):
 		if val > best_val:
 			best_val = val
 			best_pos = b_new_pos
+	knowledge_base.minimax_results[(board.hash(),depth)] = (best_pos, best_val)
 	return best_pos, best_val
 
 def auto_game():
 	a = Board()
-	while True:
+	for i in xrange(10):
 		new_move = minimax(a)[0]
 		print new_move
 		a = move(a, new_move)
 		if score(a,a.new_move*(-1)) == 1000:
 			return str(a.new_move*(-1)) + "Wins!"
 		print a
+		pickle.dump(knowledge_base,datafile)
 		#p = input()
 		#a = move(a, p)
 		#print a
+	datafile.flush()

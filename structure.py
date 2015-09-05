@@ -1,6 +1,19 @@
 import copy
+import pickle
+import hashlib
 
 sgn = lambda n: 0 if n == 0 else n/abs(n)
+
+class knowledge():
+	def __init__(self):
+		self.scores = {}
+		self.minimax_results = {}
+
+datafile = open("data",'rb')
+knowledge_base = pickle.load(datafile)
+print knowledge_base.scores
+raw_input()
+datafile = open("data",'wb')
 
 class Board():
 	def __init__(self, n=6, m=9, new_move=1):
@@ -20,6 +33,8 @@ class Board():
 				s += " "
 			s += "\n"
 		return s
+	def hash(self):
+		return str(self.board)+str(self.new_move)
 	def critical_mass(self,pos):
 		if pos == (0,0) or pos == (self.m - 1, self.n - 1) or pos == (self.m - 1, 0) or pos == (0, self.n - 1):
 			return 2
@@ -74,6 +89,8 @@ def chains(board,player):
 
 
 def score(board, player):
+	if board.hash() in knowledge_base.scores:
+		return knowledge_base.scores[board.hash()]
 	sc = 0
 	my_orbs, enemy_orbs = 0, 0
 	for pos in [(x,y) for x in xrange(board.m) for y in xrange(board.n)]:
@@ -107,40 +124,5 @@ def score(board, player):
 		return -1000
 	#The chain Heuristic
 	sc += sum([2*i for i in chains(board,player) if i > 1])
+	knowledge_base.scores[board.hash()] = sc
 	return sc
-
-def bestn(board,n=10):
-	conf = {}
-	for pos in [(x,y) for x in xrange(board.m) for y in xrange(board.n)]:
-		if board.new_move == sgn(board[pos]) or 0 == sgn(board[pos]): 
-			conf[pos] = score(move(board,pos),board.new_move)
-			#Return just the winning position in case you find one
-			if conf[pos]==1000:
-				return [pos]
-	return sorted(conf, key=conf.get, reverse=True)[:n]
-
-def minimax(board,depth=3):
-	best_moves = bestn(board,n=5)
-	if depth == 1:
-		return (best_moves[0], score(move(board,best_moves[0]),board.new_move))
-	best_pos, best_val = 0, 0
-	for b_new_pos in bestn(board):
-		b_new = move(board,b_new_pos)
-		val = minimax(b_new, depth=depth-1)[1]
-		if val > best_val:
-			best_val = val
-			best_pos = b_new_pos
-	return best_pos, best_val
-
-def auto_game():
-	a = Board()
-	while True:
-		new_move = minimax(a)[0]
-		print new_move
-		a = move(a, new_move)
-		if score(a,a.new_move*(-1)) == 1000:
-			return str(a.new_move*(-1)) + "Wins!"
-		print a
-		#p = input()
-		#a = move(a, p)
-		#print a
