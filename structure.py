@@ -1,6 +1,6 @@
 import copy
 import pickle
-import hashlib
+import time
 
 sgn = lambda n: 0 if n == 0 else n/abs(n)
 
@@ -10,10 +10,8 @@ class knowledge():
 		self.minimax_results = {}
 
 datafile = open("data",'rb')
-knowledge_base = pickle.load(datafile)
-print knowledge_base.scores
-raw_input()
-datafile = open("data",'wb')
+#knowledge_base = pickle.load(datafile)
+datafile.close()
 
 class Board():
 	def __init__(self, n=6, m=9, new_move=1):
@@ -53,11 +51,17 @@ def move(board, pos):
 	board = copy.deepcopy(board)
 	assert board.new_move == sgn(board[pos]) or 0 == sgn(board[pos])
 	board[pos] = board[pos] + board.new_move
+	t = time.time()
 	while True:
 		unstable = []
 		for pos in [(x,y) for x in xrange(board.m) for y in xrange(board.n)]:
 			if abs(board[pos]) >= board.critical_mass(pos):
 				unstable.append(pos)
+		if time.time() - t >= 3:
+			#Can't afford to spend more time, strange loop here!
+			#print board, pos
+			#raw_input()
+			break
 		#print board
 		#raw_input()
 		if not unstable:
@@ -89,8 +93,8 @@ def chains(board,player):
 
 
 def score(board, player):
-	if board.hash() in knowledge_base.scores:
-		return knowledge_base.scores[board.hash()]
+	#if board.hash() in knowledge_base.scores:
+	#	return knowledge_base.scores[board.hash()]
 	sc = 0
 	my_orbs, enemy_orbs = 0, 0
 	for pos in [(x,y) for x in xrange(board.m) for y in xrange(board.n)]:
@@ -124,5 +128,5 @@ def score(board, player):
 		return -1000
 	#The chain Heuristic
 	sc += sum([2*i for i in chains(board,player) if i > 1])
-	knowledge_base.scores[board.hash()] = sc
+	#knowledge_base.scores[board.hash()] = sc
 	return sc
