@@ -6,7 +6,7 @@ def bestn(board,n=10):
 		if board.new_move == sgn(board[pos]) or 0 == sgn(board[pos]): 
 			conf[pos] = score(move(board,pos),board.new_move)
 			#Return just the winning position in case you find one
-			if conf[pos]==1000:
+			if conf[pos]==10000:
 				return [pos]
 	return sorted(conf, key=conf.get, reverse=True)[:n]
 
@@ -35,8 +35,8 @@ def auto_game():
 		new_move = minimax(a)[0]
 		print new_move
 		a = move(a, new_move)
-		if score(a,a.new_move*(-1)) == 1000:
-			return str(a.new_move*(-1)) + "Wins!"
+		if score(a,a.new_move*(-1)) == 10000:
+			return str(a.new_move*(-1)) + " Wins!"
 		print a
 		#p = input()
 		#a = move(a, p)

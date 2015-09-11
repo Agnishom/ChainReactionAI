@@ -122,10 +122,10 @@ def score(board, player):
 	sc += my_orbs
 	#You win when the enemy has no orbs
 	if enemy_orbs == 0 and my_orbs > 1:
-		return 1000
+		return 10000
 	#You loose when you have no orbs
 	elif my_orbs == 0 and enemy_orbs > 1:
-		return -1000
+		return -10000
 	#The chain Heuristic
 	sc += sum([2*i for i in chains(board,player) if i > 1])
 	#knowledge_base.scores[board.hash()] = sc
