@@ -1,17 +1,7 @@
 import copy
-import pickle
 import time
 
 sgn = lambda n: 0 if n == 0 else n/abs(n)
-
-class knowledge():
-	def __init__(self):
-		self.scores = {}
-		self.minimax_results = {}
-
-datafile = open("data",'rb')
-#knowledge_base = pickle.load(datafile)
-datafile.close()
 
 class Board():
 	def __init__(self, n=6, m=9, new_move=1):
@@ -93,8 +83,6 @@ def chains(board,player):
 
 
 def score(board, player):
-	#if board.hash() in knowledge_base.scores:
-	#	return knowledge_base.scores[board.hash()]
 	sc = 0
 	my_orbs, enemy_orbs = 0, 0
 	for pos in [(x,y) for x in xrange(board.m) for y in xrange(board.n)]:
@@ -128,5 +116,4 @@ def score(board, player):
 		return -10000
 	#The chain Heuristic
 	sc += sum([2*i for i in chains(board,player) if i > 1])
-	#knowledge_base.scores[board.hash()] = sc
 	return sc

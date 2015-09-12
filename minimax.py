@@ -11,9 +11,6 @@ def bestn(board,n=10):
 	return sorted(conf, key=conf.get, reverse=True)[:n]
 
 def minimax(board,depth=3,breadth=5):
-	#if (board.hash(),depth) in knowledge_base.minimax_results:
-	#	print "hit"
-	#	return knowledge_base.minimax_results[(board.hash(),depth)]
 	best_moves = bestn(board,n=breadth)
 	best_pos, best_val = (best_moves[0], score(move(board,best_moves[0]),board.new_move))
 	if depth == 1:
@@ -24,7 +21,6 @@ def minimax(board,depth=3,breadth=5):
 		if val > best_val:
 			best_val = val
 			best_pos = b_new_pos
-	#knowledge_base.minimax_results[(board.hash(),depth)] = (best_pos, best_val)
 	return best_pos, best_val
 
 def auto_game():
