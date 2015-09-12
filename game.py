@@ -16,7 +16,7 @@ def drawBoard(board=structure.Board()):
 		if abs(board[pos]) >= board.critical_mass(pos):
 			color = (255,255,0)
 		elif structure.sgn(board[pos]) == 0:
-			color = (255,255,255)
+			color = (90,90,90)
 		elif structure.sgn(board[pos]) == 1:
 			color = (255,0,0)
 		else:
@@ -101,7 +101,7 @@ def main():
 			if (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN) or event.type == pygame.MOUSEBUTTONDOWN:
 				this_loop = False
 			elif event.type == pygame.KEYDOWN:
-				if chr(event.key) in '1234567890':
+				if event.key < 256 and chr(event.key) in '1234567890':
 					rect = pygame.Rect(12*m,25*n,100,100)
 					pygame.draw.rect(surface,(0,0,0),rect,0)
 					pygame.display.update()
@@ -130,7 +130,7 @@ def main():
 			if (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN) or event.type == pygame.MOUSEBUTTONDOWN:
 				this_loop = False
 			elif event.type == pygame.KEYDOWN:
-				if chr(event.key) in '1234567890':
+				if event.key < 256 and chr(event.key) in '1234567890':
 					rect = pygame.Rect(12*m,25*n,100,100)
 					pygame.draw.rect(surface,(0,0,0),rect,0)
 					pygame.display.update()
@@ -159,7 +159,7 @@ def main():
 			if (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN) or event.type == pygame.MOUSEBUTTONDOWN:
 				this_loop = False
 			elif event.type == pygame.KEYDOWN:
-				if chr(event.key) in '1234567890':
+				if event.key < 256 and chr(event.key) in '1234567890':
 					rect = pygame.Rect(12*m,25*n,100,100)
 					pygame.draw.rect(surface,(0,0,0),rect,0)
 					pygame.display.update()
@@ -193,6 +193,9 @@ def main():
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				x,y = pygame.mouse.get_pos()
 				x,y = x/50,y/50
+				if not (board.new_move == structure.sgn(board[(y,x)]) or 0 == structure.sgn(board[(y,x)])):
+					print "Illegal Move!"
+					continue
 				show_move((y,x))
 				lock.acquire()
 				thread.start_new_thread(slowMove, (board,(y,x)))
