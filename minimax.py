@@ -22,22 +22,3 @@ def minimax(board,depth=3,breadth=5):
 			best_val = val
 			best_pos = b_new_pos
 	return best_pos, best_val
-
-def auto_game():
-	a = Board()
-	i = 0
-	while True:
-		i += 1
-		new_move = minimax(a)[0]
-		print new_move
-		a = move(a, new_move)
-		if score(a,a.new_move*(-1)) == 10000:
-			return str(a.new_move*(-1)) + " Wins!"
-		print a
-		#p = input()
-		#a = move(a, p)
-		#print a
-	#	if not i%20:
-	#		datafile = open("data",'wb')
-	#		pickle.dump(knowledge_base,datafile)
-	#		datafile.close()
