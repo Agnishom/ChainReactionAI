@@ -225,7 +225,7 @@ def main():
 	surface = pygame.display.set_mode((50*n, 50*m))
 	font = pygame.font.Font('Font.ttf', 72)
 	pygame.display.set_caption('Chain Reaction')
-	if winner == -1:
+	if winner == 1:
 		text = font.render("Red", 1, (255,0,0))
 	else:
 		text = font.render("Green", 1, (0,255,0))
