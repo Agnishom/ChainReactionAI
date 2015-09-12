@@ -2,7 +2,9 @@
 Artificial Intelligence for Buddy Matt Entertainment's Chain Reaction
 
 ##About
-A minimax heuristic search applied on [Chain Reaction](https://play.google.com/store/apps/details?id=com.BuddyMattEnt.ChainReaction&hl=en)
+
+[See note on Brilliant](https://brilliant.org/discussions/thread/artificial-intelligence-for-chain-reaction/)
+
 
 ##Installation
 
